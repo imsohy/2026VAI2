@@ -1,0 +1,36 @@
+experiment_name: patch_p2
+source_reference: Patch size ablation based on UVA DL Tutorial 15
+
+data:
+  dataset: CIFAR10
+  data_dir: data
+  image_size: 32
+  num_classes: 10
+  train_augmentation: true
+
+model:
+  type: vit
+  patch_size: 2
+  num_channels: 3
+  embed_dim: 128
+  hidden_dim: 512
+  num_heads: 4
+  num_layers: 4
+  dropout: 0.1
+  pooling_mode: cls
+  use_positional_embedding: true
+
+training:
+  device: auto
+  seed: 42
+  deterministic: true
+  batch_size: 128
+  num_workers: 4
+  epochs: 20
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  optimizer: adamw
+
+visualization:
+  save_dataset_samples: false
+  save_patch_visualization: true
