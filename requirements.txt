@@ -7,3 +7,5 @@ pyyaml
 pillow
 torchinfo
 fvcore
+pytorch-lightning
+tensorboard
