@@ -1,5 +1,5 @@
 experiment_name: vit_baseline
-source_reference: UVA DL Tutorial 15 baseline-style ViT
+source_reference: UVA DL Tutorial 15 original ViT baseline hyperparameters
 
 data:
   dataset: CIFAR10
@@ -12,11 +12,11 @@ model:
   type: vit
   patch_size: 4
   num_channels: 3
-  embed_dim: 128
+  embed_dim: 256
   hidden_dim: 512
-  num_heads: 4
-  num_layers: 4
-  dropout: 0.1
+  num_heads: 8
+  num_layers: 6
+  dropout: 0.2
   pooling_mode: cls
   use_positional_embedding: true
 
@@ -26,10 +26,13 @@ training:
   deterministic: true
   batch_size: 128
   num_workers: 4
-  epochs: 20
+  epochs: 180
   learning_rate: 0.0003
-  weight_decay: 0.0001
+  weight_decay: 0.0
   optimizer: adamw
+  scheduler: multistep
+  lr_milestones: [100, 150]
+  lr_gamma: 0.1
 
 visualization:
   save_dataset_samples: true
