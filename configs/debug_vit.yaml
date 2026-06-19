@@ -1,0 +1,36 @@
+experiment_name: debug_vit
+source_reference: Quick smoke test for ViT training pipeline
+
+data:
+  dataset: CIFAR10
+  data_dir: data
+  image_size: 32
+  num_classes: 10
+  train_augmentation: true
+
+model:
+  type: vit
+  patch_size: 4
+  num_channels: 3
+  embed_dim: 64
+  hidden_dim: 128
+  num_heads: 2
+  num_layers: 1
+  dropout: 0.1
+  pooling_mode: cls
+  use_positional_embedding: true
+
+training:
+  device: auto
+  seed: 42
+  deterministic: true
+  batch_size: 128
+  num_workers: 2
+  epochs: 1
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  optimizer: adamw
+
+visualization:
+  save_dataset_samples: true
+  save_patch_visualization: true
