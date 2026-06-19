@@ -73,15 +73,44 @@ class LitImageClassifier(pl.LightningModule):
         return {"test_loss": loss, "test_acc": acc}
 
     def configure_optimizers(self):
+        """Configure optimizer and scheduler.
+
+        UVA Tutorial 15 uses AdamW with lr=3e-4 and a MultiStepLR scheduler
+        with milestones [100, 150] and gamma=0.1 for its ViT run. The values are
+        controlled by YAML so ablations can keep the same training rule unless a
+        config intentionally changes it.
+        """
         train_cfg = self.config_dict["training"]
         name = train_cfg.get("optimizer", "adamw").lower()
         lr = train_cfg.get("learning_rate", 3e-4)
         weight_decay = train_cfg.get("weight_decay", 0.0)
 
         if name == "adamw":
-            return optim.AdamW(self.parameters(), lr=lr, weight_decay=weight_decay)
-        if name == "adam":
-            return optim.Adam(self.parameters(), lr=lr, weight_decay=weight_decay)
-        if name == "sgd":
-            return optim.SGD(self.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)
-        raise ValueError(f"Unsupported optimizer: {name}")
+            optimizer = optim.AdamW(self.parameters(), lr=lr, weight_decay=weight_decay)
+        elif name == "adam":
+            optimizer = optim.Adam(self.parameters(), lr=lr, weight_decay=weight_decay)
+        elif name == "sgd":
+            optimizer = optim.SGD(self.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)
+        else:
+            raise ValueError(f"Unsupported optimizer: {name}")
+
+        scheduler_name = train_cfg.get("scheduler", "multistep")
+        if scheduler_name is None or str(scheduler_name).lower() in {"none", "off", "false"}:
+            return optimizer
+
+        if str(scheduler_name).lower() in {"multistep", "multi_step", "multisteplr"}:
+            scheduler = optim.lr_scheduler.MultiStepLR(
+                optimizer,
+                milestones=train_cfg.get("lr_milestones", [100, 150]),
+                gamma=train_cfg.get("lr_gamma", 0.1),
+            )
+            return {
+                "optimizer": optimizer,
+                "lr_scheduler": {
+                    "scheduler": scheduler,
+                    "interval": "epoch",
+                    "frequency": 1,
+                },
+            }
+
+        raise ValueError(f"Unsupported scheduler: {scheduler_name}")
