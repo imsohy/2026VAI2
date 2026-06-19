@@ -4,8 +4,8 @@ UVA Tutorial 15 adaptation notes
 --------------------------------
 The VisionTransformer, img_to_patch, and Pre-LN AttentionBlock are adapted from
 UVA DL Tutorial 15. Changes made for this assignment:
-- removed PyTorch Lightning dependency
-- used batch_first=True in nn.MultiheadAttention
+- kept the UVA-style PyTorch Lightning training path in `src/lit_module.py`
+- used batch_first=True in nn.MultiheadAttention for clearer [B, T, D] tensors
 - added pooling_mode='cls' or 'mean' for the student twist
 - added optional positional embedding removal
 - added a small CNN baseline for fair comparison on CIFAR-10
@@ -13,7 +13,6 @@ UVA DL Tutorial 15. Changes made for this assignment:
 
 from __future__ import annotations
 
-from dataclasses import dataclass
 from typing import Dict, Any
 
 import torch
