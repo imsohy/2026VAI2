@@ -22,8 +22,33 @@
 | learnable positional embedding | position-dependent token information | `src/models.py` |
 | PyTorch Lightning training style | LightningModule + Trainer 기반 학습 관리 | `src/lit_module.py`, `src/train.py` |
 | AdamW optimizer | baseline optimizer | `src/lit_module.py`, `configs/*.yaml` |
+| MultiStepLR scheduler | milestones [100, 150], gamma 0.1 | `src/lit_module.py`, `configs/*.yaml` |
 
-## 3. 그대로 쓰지 않고 바꾼 점
+## 3. UVA 원본 baseline과 동일하게 맞춘 설정
+
+`configs/vit_baseline.yaml`은 UVA Tutorial 15의 ViT baseline hyperparameter를 기준으로 맞춘다.
+
+| Item | UVA Tutorial 15 value | This project baseline |
+|---|---:|---:|
+| patch_size | 4 | 4 |
+| num_patches | 64 | model에서 자동 계산 |
+| embed_dim | 256 | 256 |
+| hidden_dim | 512 | 512 |
+| num_heads | 8 | 8 |
+| num_layers | 6 | 6 |
+| dropout | 0.2 | 0.2 |
+| learning_rate | 3e-4 | 3e-4 |
+| batch_size | 128 | 128 |
+| epochs | 180 | 180 |
+| optimizer | AdamW | AdamW |
+| scheduler | MultiStepLR | MultiStepLR |
+| lr milestones | [100, 150] | [100, 150] |
+| lr gamma | 0.1 | 0.1 |
+| train/val/test split | 45k / 5k / 10k | 45k / 5k / 10k |
+
+주의: `configs/debug_vit.yaml`은 빠른 smoke test용이므로 UVA baseline과 다르다. 실제 보고서의 baseline 기준은 `configs/vit_baseline.yaml`이다.
+
+## 4. 그대로 쓰지 않고 바꾼 점
 
 | UVA Tutorial form | This project form | Reason |
 |---|---|---|
@@ -35,17 +60,19 @@
 | only CLS-token classification | CLS / mean pooling 선택 가능 | student twist 수행을 위해 확장 |
 | 단일 tutorial 실행 흐름 | ViT/CNN/patch/capacity/twist 실험 스크립트 분리 | 과제 필수 실험을 빠짐없이 수행하기 위함 |
 
-## 4. 보고서에서 사용할 수 있는 설명 방향
+## 5. 보고서에서 사용할 수 있는 설명 방향
 
-본 프로젝트의 ViT 구현은 UVA DL Tutorial 15의 CIFAR-10 Vision Transformer 예제를 출발점으로 삼았다. 원 tutorial의 PyTorch Lightning 기반 학습 구조, CIFAR-10 data preparation, image-to-patch 변환, Transformer block, CLS token, learnable positional embedding 구조를 참고하였다. 다만 본 과제의 목적은 단순히 tutorial을 재실행하는 것이 아니라 ViT 구조 변화의 효과를 분석하는 것이므로, patch size, embedding dimension, transformer depth, attention head 수, pooling strategy를 YAML config 단위로 변경할 수 있도록 재구성하였다. 또한 각 실험의 `train_log.csv`, `metrics.json`, learning curve, confusion matrix, wrong prediction examples, parameter count, training time을 저장하도록 확장하였다.
+본 프로젝트의 ViT baseline은 UVA DL Tutorial 15의 CIFAR-10 Vision Transformer 예제를 출발점으로 삼았다. 원 tutorial의 PyTorch Lightning 기반 학습 구조, CIFAR-10 data preparation, image-to-patch 변환, linear patch projection, CLS token, learnable positional embedding, Pre-LN Transformer block 구조를 유지하였다. 또한 `configs/vit_baseline.yaml`의 patch size, embedding dimension, hidden dimension, attention head 수, transformer depth, dropout, learning rate, epoch, scheduler는 UVA Tutorial 15의 baseline 설정과 동일하게 맞추었다.
 
-## 5. 교수님 강의/과제 의도와의 연결
+다만 본 과제의 목적은 단순히 tutorial을 재실행하는 것이 아니라 ViT 구조 변화의 효과를 분석하는 것이므로, notebook 구조를 `.py` script와 YAML config 구조로 재구성하였다. 이를 통해 patch size, model capacity, pooling strategy를 실험별로 바꿀 수 있게 했고, 각 실험의 `train_log.csv`, `metrics.json`, learning curve, confusion matrix, wrong prediction examples, parameter count, training time을 저장하도록 확장하였다.
+
+## 6. 교수님 강의/과제 의도와의 연결
 
 교수님은 ViT에서 이미지를 patch 단위로 나누고 각 patch를 token처럼 처리한다고 설명하였다. 또한 patch token을 linear projection으로 model dimension에 맞추고, positional encoding과 CLS token을 더해 Transformer encoder에 넣는 구조를 강조하였다. 이 프로젝트의 `models.py`는 이 흐름을 코드로 구현한다.
 
-교수님은 동시에 모델 dimension, token 수, patch 수, attention head, CNN feature 사용 여부 같은 설계 선택을 학생이 전략적으로 바꿔볼 수 있다고 설명하였다. 따라서 본 프로젝트는 Lightning framework 자체를 바꾸는 것보다, config를 통해 구조적 실험 변수를 바꾸고 그 결과를 figure로 비교하는 것을 핵심으로 둔다.
+교수님은 동시에 model dimension, token 수, patch 수, attention head, CNN feature 사용 여부 같은 설계 선택을 학생이 전략적으로 바꿔볼 수 있다고 설명하였다. 따라서 본 프로젝트는 Lightning framework 자체를 바꾸는 것보다, config를 통해 구조적 실험 변수를 바꾸고 그 결과를 figure로 비교하는 것을 핵심으로 둔다.
 
-## 6. 아직 확인해야 할 것
+## 7. 아직 확인해야 할 것
 
 - 실제 실행 후 `train_log.csv`, `metrics.json`, `learning_curve.png`가 정상 생성되는지 확인
 - `pooling_mode=mean`이 CLS token 대신 mean pooling을 사용하는 twist로 정상 동작하는지 확인
