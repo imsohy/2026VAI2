@@ -3,7 +3,6 @@
 UVA Tutorial 15 source connection:
 - CIFAR-10 train/val/test split follows the 45k/5k/10k setup.
 - Normalization constants and basic augmentation are inherited from the tutorial.
-- AutoAugment is exposed as an optional augmentation-policy twist for ablation.
 """
 
 from __future__ import annotations
@@ -29,66 +28,24 @@ CIFAR10_MEAN = [0.49139968, 0.48215841, 0.44653091]
 CIFAR10_STD = [0.24703223, 0.24348513, 0.26158784]
 
 
-def _build_autoaugment_transform(image_size: int, use_cutout: bool = False):
-    """Build a CIFAR-10 AutoAugment transform.
-
-    This keeps CIFAR-10 at 32x32. The DACON reference used AutoAugment
-    together with a ResNet-style 224x224 resize, but resizing would change
-    the ViT token grid and make patch-size experiments unfair. Therefore,
-    only the augmentation policy idea is adapted here.
-    """
-    tensor_steps = [
-        transforms.ToTensor(),
-    ]
-    if use_cutout:
-        # Tensor-level approximation of Cutout. Kept optional so that
-        # AutoAugment-only and AutoAugment+Cutout can be separated if needed.
-        tensor_steps.append(
-            transforms.RandomErasing(
-                p=0.25,
-                scale=(0.02, 0.20),
-                ratio=(0.3, 3.3),
-                value=0,
-            )
-        )
-    tensor_steps.append(transforms.Normalize(CIFAR10_MEAN, CIFAR10_STD))
-
-    return transforms.Compose([
-        transforms.RandomCrop(image_size, padding=4),
-        transforms.RandomHorizontalFlip(),
-        transforms.AutoAugment(policy=transforms.AutoAugmentPolicy.CIFAR10),
-        *tensor_steps,
-    ])
-
-
 def get_transforms(config: Dict):
     image_size = config["data"].get("image_size", 32)
     train_aug = config["data"].get("train_augmentation", True)
-    augmentation_policy = config["data"].get("augmentation_policy", "basic")
 
     test_transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(CIFAR10_MEAN, CIFAR10_STD),
     ])
 
-    if not train_aug:
-        train_transform = test_transform
-    elif augmentation_policy == "basic":
+    if train_aug:
         train_transform = transforms.Compose([
             transforms.RandomHorizontalFlip(),
             transforms.RandomResizedCrop((image_size, image_size), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
             transforms.ToTensor(),
             transforms.Normalize(CIFAR10_MEAN, CIFAR10_STD),
         ])
-    elif augmentation_policy == "autoaugment":
-        train_transform = _build_autoaugment_transform(image_size=image_size, use_cutout=False)
-    elif augmentation_policy == "autoaugment_cutout":
-        train_transform = _build_autoaugment_transform(image_size=image_size, use_cutout=True)
     else:
-        raise ValueError(
-            f"Unknown augmentation_policy={augmentation_policy!r}. "
-            "Use one of: basic, autoaugment, autoaugment_cutout."
-        )
+        train_transform = test_transform
 
     return train_transform, test_transform
 
