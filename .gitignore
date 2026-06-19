@@ -50,20 +50,49 @@ cifar-10-python.tar.gz
 
 # =========================
 # Experiment outputs
+# Keep small report evidence, ignore heavy artifacts.
 # =========================
 outputs/*
+
+# Logs: keep run logs so execution evidence can be reviewed.
 !outputs/logs/
 !outputs/logs/.gitkeep
+!outputs/logs/*.log
+
+# Result folders: keep lightweight summaries, CSV logs, configs, and figures.
+!outputs/results/
+!outputs/results/.gitkeep
+!outputs/results/**/
+!outputs/results/**/*.json
+!outputs/results/**/*.csv
+!outputs/results/**/*.txt
+!outputs/results/**/*.yaml
+!outputs/results/**/*.yml
+!outputs/results/**/*.png
+!outputs/results/**/*.jpg
+!outputs/results/**/*.jpeg
+!outputs/results/**/*.md
+
+# Explicitly ignore heavy/temporary result artifacts.
+outputs/results/**/*.pt
+outputs/results/**/*.pth
+outputs/results/**/*.ckpt
+outputs/results/**/*.onnx
+outputs/results/**/checkpoint*
+outputs/results/**/lightning_logs/
+outputs/results/**/events.out.tfevents*
+outputs/results/**/__pycache__/
+
+# Optional top-level figure/checkpoint placeholders.
 !outputs/figures/
 !outputs/figures/.gitkeep
 !outputs/checkpoints/
 !outputs/checkpoints/.gitkeep
-!outputs/results/
-!outputs/results/.gitkeep
 
 runs/
 wandb/
 tensorboard/
+lightning_logs/
 
 # =========================
 # Model checkpoints
@@ -76,9 +105,11 @@ tensorboard/
 # =========================
 # Logs
 # =========================
-*.log
 *.out
 *.err
+
+# Allow experiment run logs under outputs/logs.
+!outputs/logs/*.log
 
 # =========================
 # Temporary files
