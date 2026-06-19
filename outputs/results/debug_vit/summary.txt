@@ -1,0 +1,13 @@
+experiment_name: debug_vit
+model_type: vit
+best_checkpoint_path: /media/cine/First/HWPJ2/2026VAI2/outputs/results/debug_vit/checkpoint_best.ckpt
+best_val_acc: 0.287200003862381
+test_loss: 1.8997382667541505
+test_acc: 0.3045
+num_parameters: 41610
+training_time_seconds: 12.57232928276062
+training_time_readable: 12s
+accelerator: gpu
+devices: 1
+gpu_name: NVIDIA RTX A6000
+seed: 42

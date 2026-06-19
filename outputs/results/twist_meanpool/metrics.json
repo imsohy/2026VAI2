@@ -1,0 +1,15 @@
+{
+  "experiment_name": "twist_meanpool",
+  "model_type": "vit",
+  "best_checkpoint_path": "/media/cine/First/HWPJ2/2026VAI2/outputs/results/twist_meanpool/checkpoint_best.ckpt",
+  "best_val_acc": 0.7034000158309937,
+  "test_loss": 0.8834693439483643,
+  "test_acc": 0.686,
+  "num_parameters": 3194634,
+  "training_time_seconds": 331.0990433692932,
+  "training_time_readable": "5m 31s",
+  "accelerator": "gpu",
+  "devices": 1,
+  "gpu_name": "NVIDIA RTX A6000",
+  "seed": 42
+}
