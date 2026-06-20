@@ -1,8 +1,25 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-cd "$(dirname "$0")/.."
+# Reproduce final 100-epoch patch-size experiments.
+# p=4 is represented by vit_baseline_e100, so patch_p4_e100 is not run separately.
+# Usage:
+#   CUDA_VISIBLE_DEVICES=0 bash scripts/run_patch_compare.sh
 
-python src/train.py --config configs/patch_p2.yaml --output_dir outputs/results/patch_p2 2>&1 | tee outputs/logs/patch_p2.log
-python src/train.py --config configs/patch_p4.yaml --output_dir outputs/results/patch_p4 2>&1 | tee outputs/logs/patch_p4.log
-python src/train.py --config configs/patch_p8.yaml --output_dir outputs/results/patch_p8 2>&1 | tee outputs/logs/patch_p8.log
+cd "$(dirname "$0")/.."
+mkdir -p outputs/logs outputs/results
+
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} PYTHONUNBUFFERED=1 python -u src/train.py \
+  --config configs/patch_p2_e100.yaml \
+  --output_dir outputs/results/patch_p2_e100 \
+  2>&1 | tee outputs/logs/patch_p2_e100_run.log
+
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} PYTHONUNBUFFERED=1 python -u src/train.py \
+  --config configs/vit_baseline_e100.yaml \
+  --output_dir outputs/results/vit_baseline_e100 \
+  2>&1 | tee outputs/logs/vit_baseline_e100_run.log
+
+CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0} PYTHONUNBUFFERED=1 python -u src/train.py \
+  --config configs/patch_p8_e100.yaml \
+  --output_dir outputs/results/patch_p8_e100 \
+  2>&1 | tee outputs/logs/patch_p8_e100_run.log
