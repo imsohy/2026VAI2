@@ -4,7 +4,7 @@
 
 본 프로젝트는 CIFAR-10 image classification에서 Vision Transformer(ViT)의 구조적 특성과 성능 변화를 실험적으로 분석하기 위한 과제이다.
 
-과제의 핵심은 단순히 ViT 코드를 실행하는 것이 아니라, 직접 학습한 결과에서 나온 figure, plot, table을 근거로 다음 질문에 답하는 것이다.
+과제의 핵심은 직접 학습한 결과에서 나온 figure, plot, table을 근거로 다음 질문에 답하는 것이다.
 
 - ViT는 이미지를 patch sequence로 바꾸어 어떻게 분류하는가?
 - patch size가 token 수, 학습 시간, 성능에 어떤 영향을 주는가?
@@ -122,7 +122,7 @@ Seed: 42
 
 ## 5. Final Experiment Set
 
-최종 보고서는 100 epoch 결과를 중심으로 작성한다. 20 epoch 결과는 예비 실행 및 sanity check 성격으로 사용하였다.
+최종 보고서는 100 epoch 결과를 중심으로 작성되었다. 20 epoch 결과는 예비 실행 및 sanity check 성격으로 사용하였다.
 
 | Experiment | Role | Main setting | Output directory |
 |---|---|---|---|
@@ -265,7 +265,7 @@ report_figures/
 
 ## 10. Report Mapping
 
-보고서에는 모든 주장에 대응되는 figure, plot, table을 연결한다.
+보고서에 figure, plot, table은 다음과 같이 사용된다.
 
 | Report Figure | File | Purpose |
 |---|---|---|
