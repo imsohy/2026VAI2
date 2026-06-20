@@ -1,0 +1,15 @@
+{
+  "experiment_name": "cnn_baseline_e100",
+  "model_type": "cnn",
+  "best_checkpoint_path": "/media/cine/First/HWPJ2/2026VAI2/outputs/results/cnn_baseline_e100/checkpoint_best.ckpt",
+  "best_val_acc": 0.8705999851226807,
+  "test_loss": 0.46393705778121946,
+  "test_acc": 0.8663,
+  "num_parameters": 559178,
+  "training_time_seconds": 791.248616695404,
+  "training_time_readable": "13m 11s",
+  "accelerator": "gpu",
+  "devices": 1,
+  "gpu_name": "NVIDIA RTX A6000",
+  "seed": 42
+}

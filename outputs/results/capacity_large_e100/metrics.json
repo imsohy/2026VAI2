@@ -1,0 +1,15 @@
+{
+  "experiment_name": "capacity_large_e100",
+  "model_type": "vit",
+  "best_checkpoint_path": "/media/cine/First/HWPJ2/2026VAI2/outputs/results/capacity_large_e100/checkpoint_best.ckpt",
+  "best_val_acc": 0.7692000269889832,
+  "test_loss": 1.0572783500671388,
+  "test_acc": 0.7556,
+  "num_parameters": 9519754,
+  "training_time_seconds": 2709.8715918064117,
+  "training_time_readable": "45m 9s",
+  "accelerator": "gpu",
+  "devices": 1,
+  "gpu_name": "NVIDIA RTX A6000",
+  "seed": 42
+}

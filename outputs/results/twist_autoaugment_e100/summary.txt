@@ -1,0 +1,13 @@
+experiment_name: twist_autoaugment_e100
+model_type: vit
+best_checkpoint_path: /media/cine/First/HWPJ2/2026VAI2/outputs/results/twist_autoaugment_e100/checkpoint_best.ckpt
+best_val_acc: 0.8248000144958496
+test_loss: 0.532547456073761
+test_acc: 0.8209
+num_parameters: 3195146
+training_time_seconds: 2301.7534561157227
+training_time_readable: 38m 21s
+accelerator: gpu
+devices: 1
+gpu_name: NVIDIA RTX A6000
+seed: 42

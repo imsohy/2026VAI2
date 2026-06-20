@@ -1,0 +1,15 @@
+{
+  "experiment_name": "twist_autoaugment",
+  "model_type": "vit",
+  "best_checkpoint_path": "/media/cine/First/HWPJ2/2026VAI2/outputs/results/twist_autoaugment/checkpoint_best.ckpt",
+  "best_val_acc": 0.6669999957084656,
+  "test_loss": 0.9319178485870361,
+  "test_acc": 0.6721,
+  "num_parameters": 3195146,
+  "training_time_seconds": 451.71423530578613,
+  "training_time_readable": "7m 31s",
+  "accelerator": "gpu",
+  "devices": 1,
+  "gpu_name": "NVIDIA RTX A6000",
+  "seed": 42
+}

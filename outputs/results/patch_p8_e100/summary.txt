@@ -1,0 +1,13 @@
+experiment_name: patch_p8_e100
+model_type: vit
+best_checkpoint_path: /media/cine/First/HWPJ2/2026VAI2/outputs/results/patch_p8_e100/checkpoint_best.ckpt
+best_val_acc: 0.7324000000953674
+test_loss: 0.9949590200424194
+test_acc: 0.723
+num_parameters: 3219722
+training_time_seconds: 2018.2304215431213
+training_time_readable: 33m 38s
+accelerator: gpu
+devices: 1
+gpu_name: NVIDIA RTX A6000
+seed: 42
