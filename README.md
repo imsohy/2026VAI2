@@ -263,26 +263,7 @@ report_figures/
 
 ---
 
-## 10. Report Mapping
-
-보고서에 figure, plot, table은 다음과 같이 사용된다.
-
-| Report Figure | File | Purpose |
-|---|---|---|
-| Figure 1 | `outputs/results/vit_baseline_e100/figures/dataset_samples.png` 또는 수동 배치 이미지 | CIFAR-10 sample 확인 |
-| Figure 2 | `outputs/results/vit_baseline_e100/figures/patch_visualization.png` | ViT patch split 설명 |
-| Figure 3 | `outputs/results/vit_baseline_e100/figures/learning_curve.png` | ViT baseline 학습 곡선 |
-| Figure 4 | `outputs/results/cnn_baseline_e100/figures/learning_curve.png` | CNN baseline 학습 곡선 |
-| Figure 5 | `report_figures/cnn_vs_vit_accuracy.png` | CNN vs ViT vs AutoAugment 성능 비교 |
-| Figure 6 | `report_figures/patch_accuracy.png`, `patch_training_time.png`, `patch_token_count.png` | patch size별 성능/비용/token 수 비교 |
-| Figure 7 | `report_figures/param_vs_accuracy.png`, `time_vs_accuracy.png` | model capacity와 비용 대비 성능 |
-| Figure 8 | 각 실험의 `figures/confusion_matrix.png` | class별 오류 패턴 |
-| Figure 9 | 각 실험의 `figures/wrong_examples.png` | 오분류 예시 분석 |
-| Figure 10 | `report_figures/autoaugment_effect.png`, `twist_accuracy.png`, `autoaugment_overfit_curve.png` | AutoAugment twist 결과 |
-
----
-
-## 11. Reproducibility Notes
+## 10. Reproducibility Notes
 
 - 모든 최종 실험은 CIFAR-10, seed 42, batch size 128, AdamW, learning rate 3e-4 조건을 기본으로 한다.
 - 최종 비교는 100 epoch budget 기준으로 수행한다.
@@ -292,7 +273,7 @@ report_figures/
 
 ---
 
-## 12. Notes on Failed / Auxiliary Experiments
+## 11. Notes on Failed / Auxiliary Experiments
 
 `twist_meanpool_e100`은 CLS token 대신 mean pooling을 사용하는 보조 twist 실험이다. 그러나 최종 Modified ViT로는 AutoAugment가 더 명확한 성능 개선을 보였으므로, mean pooling은 최종 report figure에서 제외하였다.
 
