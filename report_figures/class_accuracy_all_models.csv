@@ -1,0 +1,71 @@
+experiment,label,class_index,class_name,total,correct,accuracy
+cnn_baseline_e100,CNN baseline,0,airplane,1000,883,0.883
+cnn_baseline_e100,CNN baseline,1,automobile,1000,944,0.944
+cnn_baseline_e100,CNN baseline,2,bird,1000,801,0.801
+cnn_baseline_e100,CNN baseline,3,cat,1000,770,0.77
+cnn_baseline_e100,CNN baseline,4,deer,1000,845,0.845
+cnn_baseline_e100,CNN baseline,5,dog,1000,754,0.754
+cnn_baseline_e100,CNN baseline,6,frog,1000,933,0.933
+cnn_baseline_e100,CNN baseline,7,horse,1000,893,0.893
+cnn_baseline_e100,CNN baseline,8,ship,1000,907,0.907
+cnn_baseline_e100,CNN baseline,9,truck,1000,933,0.933
+vit_baseline_e100,ViT baseline / p4,0,airplane,1000,803,0.803
+vit_baseline_e100,ViT baseline / p4,1,automobile,1000,855,0.855
+vit_baseline_e100,ViT baseline / p4,2,bird,1000,612,0.612
+vit_baseline_e100,ViT baseline / p4,3,cat,1000,582,0.582
+vit_baseline_e100,ViT baseline / p4,4,deer,1000,683,0.683
+vit_baseline_e100,ViT baseline / p4,5,dog,1000,679,0.679
+vit_baseline_e100,ViT baseline / p4,6,frog,1000,836,0.836
+vit_baseline_e100,ViT baseline / p4,7,horse,1000,827,0.827
+vit_baseline_e100,ViT baseline / p4,8,ship,1000,882,0.882
+vit_baseline_e100,ViT baseline / p4,9,truck,1000,825,0.825
+patch_p2_e100,Patch size 2,0,airplane,1000,812,0.812
+patch_p2_e100,Patch size 2,1,automobile,1000,794,0.794
+patch_p2_e100,Patch size 2,2,bird,1000,626,0.626
+patch_p2_e100,Patch size 2,3,cat,1000,469,0.469
+patch_p2_e100,Patch size 2,4,deer,1000,729,0.729
+patch_p2_e100,Patch size 2,5,dog,1000,711,0.711
+patch_p2_e100,Patch size 2,6,frog,1000,826,0.826
+patch_p2_e100,Patch size 2,7,horse,1000,808,0.808
+patch_p2_e100,Patch size 2,8,ship,1000,843,0.843
+patch_p2_e100,Patch size 2,9,truck,1000,855,0.855
+patch_p8_e100,Patch size 8,0,airplane,1000,815,0.815
+patch_p8_e100,Patch size 8,1,automobile,1000,805,0.805
+patch_p8_e100,Patch size 8,2,bird,1000,613,0.613
+patch_p8_e100,Patch size 8,3,cat,1000,546,0.546
+patch_p8_e100,Patch size 8,4,deer,1000,634,0.634
+patch_p8_e100,Patch size 8,5,dog,1000,637,0.637
+patch_p8_e100,Patch size 8,6,frog,1000,786,0.786
+patch_p8_e100,Patch size 8,7,horse,1000,801,0.801
+patch_p8_e100,Patch size 8,8,ship,1000,787,0.787
+patch_p8_e100,Patch size 8,9,truck,1000,806,0.806
+capacity_small_e100,Small ViT,0,airplane,1000,850,0.85
+capacity_small_e100,Small ViT,1,automobile,1000,809,0.809
+capacity_small_e100,Small ViT,2,bird,1000,560,0.56
+capacity_small_e100,Small ViT,3,cat,1000,519,0.519
+capacity_small_e100,Small ViT,4,deer,1000,605,0.605
+capacity_small_e100,Small ViT,5,dog,1000,607,0.607
+capacity_small_e100,Small ViT,6,frog,1000,851,0.851
+capacity_small_e100,Small ViT,7,horse,1000,837,0.837
+capacity_small_e100,Small ViT,8,ship,1000,816,0.816
+capacity_small_e100,Small ViT,9,truck,1000,826,0.826
+capacity_large_e100,Large ViT,0,airplane,1000,803,0.803
+capacity_large_e100,Large ViT,1,automobile,1000,888,0.888
+capacity_large_e100,Large ViT,2,bird,1000,645,0.645
+capacity_large_e100,Large ViT,3,cat,1000,501,0.501
+capacity_large_e100,Large ViT,4,deer,1000,695,0.695
+capacity_large_e100,Large ViT,5,dog,1000,680,0.68
+capacity_large_e100,Large ViT,6,frog,1000,874,0.874
+capacity_large_e100,Large ViT,7,horse,1000,806,0.806
+capacity_large_e100,Large ViT,8,ship,1000,828,0.828
+capacity_large_e100,Large ViT,9,truck,1000,836,0.836
+twist_autoaugment_e100,ViT + AutoAugment,0,airplane,1000,835,0.835
+twist_autoaugment_e100,ViT + AutoAugment,1,automobile,1000,940,0.94
+twist_autoaugment_e100,ViT + AutoAugment,2,bird,1000,816,0.816
+twist_autoaugment_e100,ViT + AutoAugment,3,cat,1000,561,0.561
+twist_autoaugment_e100,ViT + AutoAugment,4,deer,1000,773,0.773
+twist_autoaugment_e100,ViT + AutoAugment,5,dog,1000,765,0.765
+twist_autoaugment_e100,ViT + AutoAugment,6,frog,1000,859,0.859
+twist_autoaugment_e100,ViT + AutoAugment,7,horse,1000,896,0.896
+twist_autoaugment_e100,ViT + AutoAugment,8,ship,1000,895,0.895
+twist_autoaugment_e100,ViT + AutoAugment,9,truck,1000,869,0.869
