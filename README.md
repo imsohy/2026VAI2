@@ -48,7 +48,8 @@
 │   ├── plot_results.py               # learning curve, confusion matrix, wrong examples
 │   └── utils.py                      # config, seed, json, summary helper
 ├── scripts/                          # 재현용 실행 스크립트와 보고서 figure 생성기
-│   ├── build_report_figures.py       # outputs/results를 읽어 report_figures 생성
+│   ├── build_report_figures.py       # outputs/results를 읽어 통합 report_figures 생성
+│   ├── build_class_accuracy_figures.py # 7개 모델의 class-wise accuracy/heatmap 생성
 │   ├── run_baselines.sh              # e100 CNN/ViT baseline 재현용
 │   ├── run_patch_compare.sh          # e100 patch size 실험 재현용
 │   ├── run_capacity_compare.sh       # e100 capacity 실험 재현용
@@ -187,16 +188,78 @@ bash scripts/run_capacity_compare.sh
 
 # 최종 AutoAugment twist 재현
 bash scripts/run_twist.sh
-
-# 저장된 outputs/results를 이용해 통합 report figure 생성
-python scripts/build_report_figures.py
 ```
-
-`build_report_figures.py`는 모델을 다시 학습하지 않는다. 이미 생성된 `outputs/results/<experiment>/metrics.json`과 `train_log.csv`만 읽어 `report_figures/`에 통합 figure를 만든다.
 
 ---
 
-## 8. Output Files
+## 8. Report Figure Utility Scripts
+
+학습이 모두 끝난 뒤에는 `outputs/results/<experiment>/`에 저장된 `metrics.json`, `train_log.csv`, `figures/`, 그리고 필요한 경우 checkpoint를 이용해 보고서용 plot을 다시 생성한다. 이 단계의 script는 **학습을 다시 돌리는 코드가 아니라, 저장된 결과를 보고서용 figure로 정리하는 코드**이다.
+
+권장 실행 순서는 다음과 같다.
+
+```bash
+# 1) metrics.json, train_log.csv만 읽어서 전체 비교 figure 생성
+python scripts/build_report_figures.py
+
+# 2) 7개 최종 모델의 CIFAR-10 class-wise accuracy figure 생성
+python scripts/build_class_accuracy_figures.py
+```
+
+GPU를 지정해서 class-wise accuracy를 다시 평가하려면 다음처럼 실행한다.
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python scripts/build_class_accuracy_figures.py --device cuda
+```
+
+이미 `class_accuracy.csv`가 있어도 checkpoint 기준으로 다시 계산하고 싶으면 다음 option을 사용한다.
+
+```bash
+CUDA_VISIBLE_DEVICES=0 python scripts/build_class_accuracy_figures.py --device cuda --force_evaluate
+```
+
+### 8.1. `build_report_figures.py`
+
+`build_report_figures.py`는 모델을 다시 학습하지 않는다. 이미 생성된 `outputs/results/<experiment>/metrics.json`과 `train_log.csv`만 읽어서 `report_figures/`에 통합 figure를 만든다.
+
+주요 출력은 다음과 같다.
+
+- `report_figures/summary_metrics.csv`: 최종 실험별 metric 요약 table
+- `report_figures/model_test_accuracy.png`: 7개 최종 실험의 test accuracy 비교
+- `report_figures/cnn_vs_vit_accuracy.png`: CNN, ViT, AutoAugment ViT 비교
+- `report_figures/patch_accuracy.png`: patch size별 test accuracy 비교
+- `report_figures/patch_training_time.png`: patch size별 training time 비교
+- `report_figures/patch_token_count.png`: patch size별 token 수 비교
+- `report_figures/param_vs_accuracy.png`: parameter count와 test accuracy 관계
+- `report_figures/time_vs_accuracy.png`: training time과 test accuracy 관계
+- `report_figures/train_val_gap.png`: 최종 train-validation accuracy gap 비교
+- `report_figures/*_val_curve.png`: CNN/ViT, patch size, capacity, twist별 validation curve
+- `report_figures/autoaugment_effect.png`: baseline ViT와 AutoAugment ViT의 test accuracy 비교
+- `report_figures/autoaugment_test_loss.png`: baseline ViT와 AutoAugment ViT의 test loss 비교
+
+이 script는 checkpoint를 요구하지 않으므로, 큰 `.ckpt` 파일이 없어도 실행 가능하다.
+
+### 8.2. `build_class_accuracy_figures.py`
+
+`build_class_accuracy_figures.py`는 7개 최종 모델의 CIFAR-10 10개 class별 test accuracy를 모아서 class-wise error analysis용 figure를 만든다.
+
+이 script는 두 가지 방식으로 동작한다.
+
+1. `outputs/results/<experiment>/class_accuracy.csv`가 이미 있으면, 해당 CSV를 읽어 figure만 다시 생성한다.
+2. `class_accuracy.csv`가 없고 `checkpoint_best.ckpt`가 있으면, 저장된 checkpoint를 CIFAR-10 test set에서 다시 평가하여 class별 accuracy CSV를 만든다.
+
+주요 출력은 다음과 같다.
+
+- `outputs/results/<experiment>/class_accuracy.csv`: 각 실험의 class별 total/correct/accuracy
+- `outputs/results/<experiment>/figures/class_accuracy.png`: 단일 모델의 class별 accuracy bar plot
+- `report_figures/class_accuracy_all_models.csv`: 7개 모델의 class별 accuracy 통합 CSV
+- `report_figures/class_accuracy_heatmap.png`: 7개 모델 × 10개 class accuracy heatmap
+
+주의할 점은 checkpoint 파일이 `.gitignore` 처리되어 있을 수 있다는 것이다. 이 경우 repository를 새로 clone한 환경에서는 checkpoint 없이 `class_accuracy.csv`를 새로 계산할 수 없다. 따라서 제출 전에는 로컬 실험 환경에서 이 script를 실행하여 `class_accuracy.csv`와 `class_accuracy_heatmap.png`를 생성해 두는 것이 좋다.
+
+---
+
+## 9. Output Files
 
 각 실험은 다음 구조로 저장된다.
 
@@ -205,12 +268,14 @@ outputs/results/<experiment>/
 ├── config.yaml             # 실행 당시 config 복사본
 ├── train_log.csv           # epoch별 train_loss/train_acc/val_loss/val_acc
 ├── metrics.json            # best_val_acc, test_acc, test_loss, parameter count, time
+├── class_accuracy.csv      # class별 test accuracy, class-wise script 실행 후 생성
 ├── summary.txt             # 사람이 읽기 쉬운 요약
 └── figures/
     ├── learning_curve.png
     ├── learning_curve_loss.png
     ├── confusion_matrix.png
     ├── wrong_examples.png
+    ├── class_accuracy.png
     └── patch_visualization.png 또는 dataset sample 관련 figure
 ```
 
@@ -232,16 +297,19 @@ report_figures/
 ├── autoaugment_overfit_curve.png
 ├── cnn_vit_val_curve.png
 ├── patch_val_curve.png
+├── capacity_accuracy.png
 ├── capacity_val_curve.png
 ├── twist_accuracy.png
 ├── twist_val_curve.png
 ├── autoaugment_effect.png
-└── autoaugment_test_loss.png
+├── autoaugment_test_loss.png
+├── class_accuracy_all_models.csv
+└── class_accuracy_heatmap.png
 ```
 
 ---
 
-## 9. Final Result Summary
+## 10. Final Result Summary
 
 | Experiment | Test Acc | Best Val Acc | Params | Training Time |
 |---|---:|---:|---:|---:|
@@ -263,7 +331,7 @@ report_figures/
 
 ---
 
-## 10. Reproducibility Notes
+## 11. Reproducibility Notes
 
 - 모든 최종 실험은 CIFAR-10, seed 42, batch size 128, AdamW, learning rate 3e-4 조건을 기본으로 한다.
 - 최종 비교는 100 epoch budget 기준으로 수행한다.
@@ -273,7 +341,7 @@ report_figures/
 
 ---
 
-## 11. Notes on Failed / Auxiliary Experiments
+## 12. Notes on Failed / Auxiliary Experiments
 
 `twist_meanpool_e100`은 CLS token 대신 mean pooling을 사용하는 보조 twist 실험이다. 그러나 최종 Modified ViT로는 AutoAugment가 더 명확한 성능 개선을 보였으므로, mean pooling은 최종 report figure에서 제외하였다.
 
